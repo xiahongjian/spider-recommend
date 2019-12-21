@@ -62,12 +62,24 @@
             <artifactId>idml-jsoup_2.12</artifactId>
             <version>${jsoup.version}</version>
         </dependency>
-        
-         <dependency>
+
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
         </dependency>
-
+        
+        <build>
+            <finalName>projectName</finalName>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <finalName>${project.name}</finalName>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </build>
     </dependencies>
 </project>
