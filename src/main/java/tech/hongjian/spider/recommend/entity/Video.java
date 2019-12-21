@@ -1,8 +1,10 @@
 package tech.hongjian.spider.recommend.entity;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -27,9 +29,10 @@ public class Video extends BaseEntity {
     
     private String name;
     
+    @Column(length = 2000)
     private String description;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(inverseJoinColumns = {@JoinColumn(name = "actor_id")}, joinColumns = {@JoinColumn(name = "video_id")})
-    private Set<Actor> actors;
+    private List<Actor> actors = new ArrayList<>();
 }

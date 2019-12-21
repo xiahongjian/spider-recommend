@@ -21,8 +21,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <httpclient.version>4.5.6</httpclient.version>
         <jsoup.version>2.0.2</jsoup.version>
+        <commons-lang3.version>3.5</commons-lang3.version>
     </properties>
 
     <dependencies>
@@ -57,16 +57,16 @@
             <artifactId>logback-classic</artifactId>
         </dependency>
 
-        <!-- <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
-        </dependency> -->
-
         <dependency>
             <groupId>io.idml</groupId>
             <artifactId>idml-jsoup_2.12</artifactId>
             <version>${jsoup.version}</version>
+        </dependency>
+        
+         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
         </dependency>
 
     </dependencies>

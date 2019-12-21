@@ -1,10 +1,6 @@
 package tech.hongjian.spider.recommend.parser;
 
-import java.io.IOException;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import tech.hongjian.spider.recommend.entity.enums.Platform;
 
 /** 
  * @author xiahongjian
@@ -15,11 +11,9 @@ public interface RecommendParser {
     
     void parse();
     
-    default Element queryElement(String url, String selector) throws IOException {
-        return Jsoup.connect(url).userAgent(USER_AGENT).get().select(selector).first();
-    }
+    String getIndexUrl();
     
-    default Elements queryElements(String url, String selector) throws IOException {
-        return Jsoup.connect(url).userAgent(USER_AGENT).get().select(selector);
-    }
+    String getMainDomain();
+    
+    Platform getPlatform();
 }

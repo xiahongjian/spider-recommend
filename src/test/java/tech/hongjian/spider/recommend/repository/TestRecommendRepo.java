@@ -38,7 +38,7 @@ public class TestRecommendRepo extends TestCaseBase {
         Actor he = new Actor();
         he.setName("何炅");
         Video video = new Video();
-        video.setActors(Stream.of(he).collect(Collectors.toSet()));
+        video.setActors(Stream.of(he).collect(Collectors.toList()));
         video.setName("令人心动的offer");
         video.setType(VideoType.VARIETY_SHOW);
         video.setDescription("desc");

@@ -2,8 +2,8 @@ package tech.hongjian.spider.recommend.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -39,7 +39,7 @@ public class TestVideoRepo extends TestCaseBase {
         video.setType(VideoType.VARIETY_SHOW);
         video.setDescription("desc");
         Actor actor = createActor();
-        Set<Actor> set = new HashSet<>(1);
+        List<Actor> set = new ArrayList<>(1);
         set.add(actor);
         video.setActors(set);
         return video;

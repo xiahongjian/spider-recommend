@@ -5,13 +5,14 @@ package tech.hongjian.spider.recommend.entity.enums;
  */
 public enum VideoType implements HasCaption {
     OTHER("其他"),
-    TV_SERIAL("电视剧"),
+    TV_SERIALS("电视剧"),
     VARIETY_SHOW("综艺"),
     MOVIE("电影"),
     LIFE("生活"),
     CARTOON("动漫"),
     CHILD("少儿"),
-    LIVE("直播");
+    LIVE("直播"),
+    REALITY_TV_SHOW("真人秀");
     
     String caption;
     
