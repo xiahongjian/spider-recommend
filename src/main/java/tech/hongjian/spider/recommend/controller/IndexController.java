@@ -4,7 +4,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tech.hongjian.spider.recommend.entity.Actor;
@@ -15,6 +14,7 @@ import tech.hongjian.spider.recommend.entity.enums.VideoType;
 import tech.hongjian.spider.recommend.model.RestResponse;
 import tech.hongjian.spider.recommend.parser.IQiYiRecommendParser;
 import tech.hongjian.spider.recommend.parser.QQRecommendParser;
+import tech.hongjian.spider.recommend.parser.YoukuRecommendParser;
 
 /** 
  * @author xiahongjian
@@ -29,7 +29,10 @@ public class IndexController {
     @Autowired
     private IQiYiRecommendParser iQiYiRecommandParser;
     
-    @GetMapping("/create")
+    @Autowired
+    private YoukuRecommendParser youKuRecommendParser;
+    
+//    @GetMapping("/create")
     public RestResponse<?> test() {
         Actor he = new Actor();
         he.setName("何炅");
@@ -46,10 +49,11 @@ public class IndexController {
         return RestResponse.ok("done");
     }
     
-    @GetMapping("/parse")
+//    @GetMapping("/parse")
     public RestResponse<?> parse() {
 //        qqRecommendParser.parse();
-        iQiYiRecommandParser.parse();
+//        iQiYiRecommandParser.parse();
+        youKuRecommendParser.parse();
         return RestResponse.ok("done");
     }
 }

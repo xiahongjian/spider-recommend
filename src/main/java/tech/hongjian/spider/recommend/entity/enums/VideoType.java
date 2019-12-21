@@ -34,6 +34,9 @@ public enum VideoType implements HasCaption {
                 return type;
             }
         }
+        if ("剧集".equals(caption)) {
+            return TV_SERIALS;
+        }
         return OTHER;
     }
 }

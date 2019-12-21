@@ -35,7 +35,7 @@ public abstract class BaseRecommendParser implements RecommendParser {
     public String processUrl(String path) {
         String url = path;
         if (url.startsWith("//")) {
-            url = "https:" + url;
+            return "https:" + url;
         }
         if (!url.contains(getMainDomain())) {
             return getIndexUrl() + (url.startsWith("/") ? "" : "/") + path;
@@ -46,7 +46,7 @@ public abstract class BaseRecommendParser implements RecommendParser {
     public VideoType videoType(String name, String type) {
         VideoTypeMapping mapping = videoTypeMappingRepo.findByVideoName(name);
         if (mapping != null) {
-            type = mapping.getVoideType();
+            type = mapping.getVideoType();
         }
         return VideoType.withCaption(type);
     }

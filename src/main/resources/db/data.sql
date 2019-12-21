@@ -1,0 +1,2 @@
+insert into video_type_mapping(video_name, video_type, create_time, update_time) values ('奇葩说', '综艺', now(), now());
+insert into video_type_mapping(video_name, video_type, create_time, update_time) values ('从地球出发', '真人秀', now(), now());
