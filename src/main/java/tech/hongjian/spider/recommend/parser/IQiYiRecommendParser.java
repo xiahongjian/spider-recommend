@@ -132,15 +132,7 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
     
     private List<Actor> getActors(Document doc) {
         List<Actor> actors = new ArrayList<>();
-        Elements container = doc.select(".actorJoin .headImg-wrap[data-moreorless=moreinfo]");
-        if (container.isEmpty()) {
-            container = doc.select(".actorJoin .headImg-wrap[data-moreorless=moreinfo]");
-        }
-        if (container.isEmpty()) {
-            doc.select(".actorJoin li.headImg-li .headImg-name").forEach(createActor(actors));
-        } else {
-            container.select(".headImg-li headImg-name").forEach(createActor(actors));
-        }
+        doc.select(".actor-list a").forEach(createActor(actors));
         return actors;
     }
     
@@ -149,7 +141,7 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
             String name = e.text();
             if (StringUtils.isNotBlank(name)) {
                 Actor actor = new Actor();
-                actor.setName(name);
+                actor.setName(name.endsWith("/") ? name.substring(0, name.length() -1) : name);
                 actors.add(actor);
             }
         };
