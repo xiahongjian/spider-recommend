@@ -52,7 +52,6 @@ public class QQRecommendParser extends BaseRecommendParser {
                 Video video = getVideoInfo(e.attr("href"), items[3]);
                 recommend.setVideo(video);
                 recommendService.saveParsedData(recommend);
-                LOGGER.debug("Recommend: {}", JSONUtil.toJSON(recommend));
             }
         } catch (Exception e) {
             LOGGER.warn("Failed to parse page.", e);

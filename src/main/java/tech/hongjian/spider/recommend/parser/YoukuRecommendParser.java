@@ -37,7 +37,11 @@ public class YoukuRecommendParser extends BaseRecommendParser {
     @Override
     public void parse() {
         try {
-            Elements navs = queryElements(getIndexUrl(), ".focusswiper_focus_nav .swiper-container .swiper-wrapper a");
+            Document doc = getDocument(getIndexUrl());
+            LOGGER.debug("Doc: {}", doc.html());
+            Elements navs = doc.select(".focusswiper_focus_nav .swiper-container .swiper-wrapper a");
+            LOGGER.debug("Nav: {}", navs.html());
+            
             int index = 0;
             for (Element e : navs) {
                 index++;

@@ -50,7 +50,6 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
                 recommend.setPlatform(getPlatform());
                 Video v = getVideoInfo(url, name);
                 recommend.setVideo(v);
-                LOGGER.info(JSONUtil.toJSON(recommend));
                 recommendService.saveParsedData(recommend);
             }
         } catch (Exception e) {
