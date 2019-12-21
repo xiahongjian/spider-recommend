@@ -15,7 +15,7 @@
     <!--滚动记录日志文件：-->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--当天生成的日志文件名称：-->
-        <file>log/proxy_log.out</file>
+        <file>log/spider-recommend.log</file>
         <!--根据时间来记录日志文件：-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--归档日志文件的名称：-->
@@ -32,7 +32,7 @@
     <!--根root logger-->
     <root level="INFO">
         <!--设置根logger的日志输出目的地-->
-        <!-- <appender-ref ref="FILE" /> -->
+        <appender-ref ref="FILE" />
         <appender-ref ref="CONSOLE" />
     </root>
 
