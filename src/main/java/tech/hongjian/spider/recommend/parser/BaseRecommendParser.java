@@ -37,6 +37,9 @@ public abstract class BaseRecommendParser implements RecommendParser {
         if (url.startsWith("//")) {
             return "https:" + url;
         }
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+            return url;
+        }
         if (!url.contains(getMainDomain())) {
             return getIndexUrl() + (url.startsWith("/") ? "" : "/") + path;
         }

@@ -14,7 +14,7 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false
         use_sql_comments: false
         format_sql: true
   h2:
@@ -24,3 +24,8 @@ spring:
       settings:
         trace: false
         web-allow-others: false
+
+spider:
+    user: test
+    password: test
+    cron: "0 0 9,21 * * *"

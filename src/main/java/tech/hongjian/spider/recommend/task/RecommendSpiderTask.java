@@ -28,8 +28,7 @@ public class RecommendSpiderTask {
     @Autowired
     private YoukuRecommendParser youkuParser;
     
-    
-    @Scheduled(cron = "0 0 10,21 * * *")
+    @Scheduled(cron = "${spider.cron:0 0 10,21 * * *}")
     public void doParse() {
         LOGGER.info("Begin to run recommend spider.");
         Instant start = Instant.now();
@@ -46,7 +45,7 @@ public class RecommendSpiderTask {
         Instant stage3 = Instant.now();
         LOGGER.info("[{}] finish. Total time costs: {}s.", youkuParser.getIndexUrl(), Duration.between(stage2, stage3).getSeconds());
         
-        LOGGER.info("Recommend spider finish task.");
+        LOGGER.info("Recommend spider finish task. Total time const: {}s.", Duration.between(start, stage3).getSeconds());
     }
 
     

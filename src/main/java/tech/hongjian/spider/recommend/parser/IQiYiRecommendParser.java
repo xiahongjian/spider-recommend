@@ -20,44 +20,50 @@ import tech.hongjian.spider.recommend.entity.Video;
 import tech.hongjian.spider.recommend.entity.enums.Platform;
 import tech.hongjian.spider.recommend.entity.enums.VideoType;
 import tech.hongjian.spider.recommend.service.RecommendService;
-import tech.hongjian.spider.recommend.util.JSONUtil;
 
-/** 
+/**
  * @author xiahongjian
- * @time   2019-12-21 13:08:01
+ * @time 2019-12-21 13:08:01
  */
 @Service
 public class IQiYiRecommendParser extends BaseRecommendParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(IQiYiRecommendParser.class);
     private static final String MAIN_DOMAIN = "www.iqiyi.com";
-    private static final String INDEX_URL = "https://" + MAIN_DOMAIN; 
-    
+    private static final String INDEX_URL = "https://" + MAIN_DOMAIN;
+
     @Autowired
     private RecommendService recommendService;
-    
+
     @Override
     public void parse() {
+        Elements navs;
         try {
-            Elements navs = queryElements(getIndexUrl(), ".side-list .side-item a");
-            int index = 0;
-            for (Element e : navs) {
-                index++;
-                
-                String url = e.attr("href");
-                String name = e.select("span.side-title").text();
-                Recommend recommend = new Recommend();
-                recommend.setIndex(index);
-                recommend.setPlatform(getPlatform());
+            navs = queryElements(getIndexUrl(), ".side-list .side-item a");
+        } catch (IOException e) {
+            LOGGER.warn("Failed to parse index page recommends.", e);
+            return;
+        }
+        int index = 0;
+        for (Element e : navs) {
+            index++;
+
+            String url = e.attr("href");
+            String name = e.select("span.side-title").text();
+            LOGGER.info("[Recommend-{}] name: {}, URL: {}", getPlatform(), name, url);
+            Recommend recommend = new Recommend();
+            recommend.setIndex(index);
+            recommend.setPlatform(getPlatform());
+            try {
                 Video v = getVideoInfo(url, name);
                 recommend.setVideo(v);
-                recommendService.saveParsedData(recommend);
+            } catch (Exception exception) {
+                LOGGER.warn("Failed to parse page.", exception);
             }
-        } catch (Exception e) {
-            LOGGER.warn("Failed to parse page.", e);
+            recommendService.saveParsedData(recommend);
         }
-        
+
     }
-    
+
     private Video getVideoInfo(String url, String name) throws IOException {
         Video v = new Video();
         v.setName(name);
@@ -72,7 +78,7 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
         }
         return featchDetail(processUrl(detailUrl), v);
     }
-    
+
     private Video getCurrentPageDetail(Document doc, Video v) {
         v.setType(videoType(v.getName(), null));
         Elements eles = doc.select(".intro-right .intro-detail .intro-detail-item");
@@ -90,7 +96,7 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
         }
         return v;
     }
-    
+
     private Video featchDetail(String url, Video v) throws IOException {
         if (StringUtils.isBlank(url)) {
             return v;
@@ -108,7 +114,7 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
         v.setActors(actors);
         return v;
     }
-    
+
     private Video withAblumInfo(Document doc, Video v) {
         String title = doc.select(".album-head-title title-link").text();
         if (StringUtils.isNotBlank(title)) {
@@ -118,7 +124,7 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
         v.setDescription(desc);
         return v;
     }
-    
+
     private Video withIntroduceInfo(Elements introduce, Video v) {
         String title = introduce.select(".info-intro-title").text();
         if (StringUtils.isNotBlank(title)) {
@@ -128,19 +134,19 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
         v.setDescription(desc);
         return v;
     }
-    
+
     private List<Actor> getActors(Document doc) {
         List<Actor> actors = new ArrayList<>();
         doc.select(".actor-list a").forEach(createActor(actors));
         return actors;
     }
-    
+
     private Consumer<Element> createActor(List<Actor> actors) {
         return (e) -> {
             String name = e.text();
             if (StringUtils.isNotBlank(name)) {
                 Actor actor = new Actor();
-                actor.setName(name.endsWith("/") ? name.substring(0, name.length() -1) : name);
+                actor.setName(name.endsWith("/") ? name.substring(0, name.length() - 1) : name);
                 actors.add(actor);
             }
         };
@@ -150,9 +156,11 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
         if (parent.isEmpty()) {
             return null;
         }
-        String desc = parent.select(".episodeIntro-brief[data-moreorless=moreinfo] .briefIntroTxt").text();
+        String desc = parent.select(".episodeIntro-brief[data-moreorless=moreinfo] .briefIntroTxt")
+                .text();
         if (StringUtils.isBlank(desc)) {
-            desc = parent.select(".episodeIntro-brief[data-moreorless=lessinfo] .briefIntroTxt").text();
+            desc = parent.select(".episodeIntro-brief[data-moreorless=lessinfo] .briefIntroTxt")
+                    .text();
         }
         if (StringUtils.isBlank(desc)) {
             desc = parent.select(".episodeIntro").text();

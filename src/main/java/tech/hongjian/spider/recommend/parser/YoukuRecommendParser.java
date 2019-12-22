@@ -20,43 +20,50 @@ import tech.hongjian.spider.recommend.entity.Video;
 import tech.hongjian.spider.recommend.entity.enums.Platform;
 import tech.hongjian.spider.recommend.service.RecommendService;
 
-/** 
+/**
  * @author xiahongjian
- * @time   2019-12-21 19:32:08
+ * @time 2019-12-21 19:32:08
  */
 @Service
 public class YoukuRecommendParser extends BaseRecommendParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(YoukuRecommendParser.class);
-    
+
     private static final String MAIN_DOMAIN = "v.youku.com";
     private static final String INDEX_URL = "https://www.youku.com";
-    
+
     @Autowired
     private RecommendService recommendService;
 
     @Override
     public void parse() {
+        Document doc;
         try {
-            Document doc = getDocument(getIndexUrl());
-            LOGGER.debug("Doc: {}", doc.html());
-            Elements navs = doc.select(".focusswiper_focus_nav .swiper-container .swiper-wrapper a");
-            LOGGER.debug("Nav: {}", navs.html());
-            
-            int index = 0;
-            for (Element e : navs) {
+            doc = getDocument(getIndexUrl());
+            // LOGGER.debug("Doc: {}", doc.html());
+        } catch (IOException e) {
+            LOGGER.warn("Failed to parse index page recommends.", e);
+            return;
+        }
+        Elements navs = doc.select(".focusswiper_focus_nav .swiper-container .swiper-wrapper a");
+        // LOGGER.debug("Nav: {}", navs.html());
+
+        int index = 0;
+        for (Element e : navs) {
+            try {
                 index++;
                 Recommend recommend = new Recommend();
                 recommend.setIndex(index);
                 recommend.setPlatform(getPlatform());
-                
+
                 String name = e.select("h2").text().substring(String.valueOf(index).length());
                 String url = e.attr("href");
+                LOGGER.info("[Recommend-{}] name: {}, URL: {}", getPlatform(), name, url);
                 Video v = getVideoInfo(processUrl(url), name);
                 recommend.setVideo(v);
                 recommendService.saveParsedData(recommend);
+            } catch (Exception exception) {
+                LOGGER.warn("Failed to parse page.", exception);
             }
-        } catch (Exception e) {
-            LOGGER.warn("Failed to parse page.", e);
         }
 
     }
@@ -67,7 +74,7 @@ public class YoukuRecommendParser extends BaseRecommendParser {
         if (StringUtils.isBlank(url)) {
             return v;
         }
-        
+
         Document doc = getDocument(url);
         String detailUrl = doc.select(".title-wrap h1 span a").attr("href");
         if (StringUtils.isBlank(detailUrl)) {

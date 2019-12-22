@@ -20,7 +20,6 @@ import tech.hongjian.spider.recommend.entity.Video;
 import tech.hongjian.spider.recommend.entity.enums.Platform;
 import tech.hongjian.spider.recommend.entity.enums.VideoType;
 import tech.hongjian.spider.recommend.service.RecommendService;
-import tech.hongjian.spider.recommend.util.JSONUtil;
 
 /**
  * @author xiahongjian
@@ -34,34 +33,43 @@ public class QQRecommendParser extends BaseRecommendParser {
 
     @Autowired
     private RecommendService recommendService;
-    
+
     @Override
     public void parse() {
+        boolean isFirst = true;
+        Elements navs;
         try {
-            boolean isFirst = true;
-            for (Element e : queryElements(getIndexUrl(), "div.slider_nav a")) {
-                // 跳过第一条
-                if (isFirst) {
-                    isFirst = false;
-                    continue;
-                }
-                Recommend recommend = new Recommend();
-                recommend.setPlatform(getPlatform());
-                String[] items = e.attr("_stat").split(":");
-                recommend.setIndex(Integer.valueOf(items[2]));
-                Video video = getVideoInfo(e.attr("href"), items[3]);
-                recommend.setVideo(video);
-                recommendService.saveParsedData(recommend);
+            navs = queryElements(getIndexUrl(), "div.slider_nav a");
+        } catch (IOException e) {
+            LOGGER.warn("Failed to parse index page recommends.", e);
+            return;
+        }
+        for (Element e : navs) {
+            // 跳过第一条
+            if (isFirst) {
+                isFirst = false;
+                continue;
             }
-        } catch (Exception e) {
-            LOGGER.warn("Failed to parse page.", e);
+            Recommend recommend = new Recommend();
+            recommend.setPlatform(getPlatform());
+            String[] items = e.attr("_stat").split(":");
+            String name = items[3];
+            String url = e.attr("href");
+            LOGGER.info("[Recommend-{}] name: {}, URL: {}", getPlatform(), name, url);
+            recommend.setIndex(Integer.valueOf(items[2]));
+            try {
+                Video video = getVideoInfo(url, name);
+                recommend.setVideo(video);
+            } catch (Exception exception) {
+                LOGGER.warn("Failed to parse page.", exception);
+            }
+            recommendService.saveParsedData(recommend);
         }
     }
 
     private Document featchVideoPage(String url) throws IOException {
         Document doc = getDocument(url);
         String frameSrouce = getFrameSource(doc);
-        LOGGER.debug("Frame source: {}", frameSrouce);
         return StringUtils.isNotBlank(frameSrouce) ? getDocument(frameSrouce) : doc;
     }
 
@@ -69,7 +77,7 @@ public class QQRecommendParser extends BaseRecommendParser {
     private String getFrameSource(Document doc) {
         return doc.select(".B_Video frame").attr("src");
     }
-    
+
     private Video getVideoInfo(String url, String name) throws IOException {
         Video video = new Video();
         Document doc = featchVideoPage(url);

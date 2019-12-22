@@ -6,7 +6,6 @@ spring:
     password: 
     driverClassName: org.h2.Driver
     data: classpath:db/data.sql
-    
-spider:
-    user: test
-    password: test
+logging:
+  level:
+    tech.hongjian.spider.recommend.parser: debug
