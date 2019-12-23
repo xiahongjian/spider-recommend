@@ -1,10 +1,10 @@
 spring:
   datasource:
-    #url: jdbc:h2:mem:h2test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    url: jdbc:h2:~/spider;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:h2test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    #url: jdbc:h2:~/spider;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     platform: h2
     username: sa
-    password: 3.1415926
+    password: 
     driverClassName: org.h2.Driver
     #data: classpath:db/data.sql
 logging:
