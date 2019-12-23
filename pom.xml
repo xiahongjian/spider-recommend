@@ -21,7 +21,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <jsoup.version>2.0.2</jsoup.version>
+        <jsoup.version>1.12.1</jsoup.version>
         <commons-lang3.version>3.5</commons-lang3.version>
     </properties>
 
@@ -58,10 +58,11 @@
         </dependency>
 
         <dependency>
-            <groupId>io.idml</groupId>
-            <artifactId>idml-jsoup_2.12</artifactId>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
             <version>${jsoup.version}</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.apache.commons</groupId>
