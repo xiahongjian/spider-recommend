@@ -26,6 +26,6 @@ spring:
         web-allow-others: false
 
 spider:
-    user: test
-    password: test
-    cron: "0 0 9,21 * * *"
+  user: test
+  password: test
+  cron: "0 0 9/21 * * *"
