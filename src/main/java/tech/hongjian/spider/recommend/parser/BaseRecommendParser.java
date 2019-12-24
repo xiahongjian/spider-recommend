@@ -6,6 +6,7 @@ package tech.hongjian.spider.recommend.parser;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -33,6 +34,9 @@ public abstract class BaseRecommendParser implements RecommendParser {
     }
     
     public String processUrl(String path) {
+        if (StringUtils.isBlank(path)) {
+            return path;
+        }
         String url = path;
         if (url.startsWith("//")) {
             return "https:" + url;

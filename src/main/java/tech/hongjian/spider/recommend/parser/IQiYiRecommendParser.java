@@ -54,10 +54,10 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
             recommend.setIndex(index);
             recommend.setPlatform(getPlatform());
             try {
-                Video v = getVideoInfo(url, name);
+                Video v = getVideoInfo(processUrl(url), name);
                 recommend.setVideo(v);
             } catch (Exception exception) {
-                LOGGER.warn("Failed to parse page.", exception);
+                LOGGER.warn("Failed to parse page, URL: {}", processUrl(url), exception);
             }
             recommendService.saveParsedData(recommend);
         }
@@ -70,13 +70,13 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
         if (StringUtils.isBlank(url)) {
             return v;
         }
-        Document doc = getDocument(processUrl(url));
+        Document doc = getDocument(url);
         String detailUrl = doc.select(".player-title a.title-link").attr("href");
         // 没有详情页面链接则在当前页面查找Video相关信息
         if (StringUtils.isBlank(detailUrl)) {
             return getCurrentPageDetail(doc, v);
         }
-        return featchDetail(processUrl(detailUrl), v);
+        return featchDetail(detailUrl, v);
     }
 
     private Video getCurrentPageDetail(Document doc, Video v) {

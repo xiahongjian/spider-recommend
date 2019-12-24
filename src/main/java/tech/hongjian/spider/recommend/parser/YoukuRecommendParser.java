@@ -49,21 +49,21 @@ public class YoukuRecommendParser extends BaseRecommendParser {
 
         int index = 0;
         for (Element e : navs) {
-            try {
-                index++;
-                Recommend recommend = new Recommend();
-                recommend.setIndex(index);
-                recommend.setPlatform(getPlatform());
+            index++;
+            Recommend recommend = new Recommend();
+            recommend.setIndex(index);
+            recommend.setPlatform(getPlatform());
 
-                String name = e.select("h2").text().substring(String.valueOf(index).length());
-                String url = e.attr("href");
-                LOGGER.info("[Recommend-{}] name: {}, URL: {}", getPlatform(), name, url);
+            String name = e.select("h2").text().substring(String.valueOf(index).length());
+            String url = e.attr("href");
+            LOGGER.info("[Recommend-{}] name: {}, URL: {}", getPlatform(), name, url);
+            try {
                 Video v = getVideoInfo(processUrl(url), name);
                 recommend.setVideo(v);
-                recommendService.saveParsedData(recommend);
             } catch (Exception exception) {
-                LOGGER.warn("Failed to parse page.", exception);
+                LOGGER.warn("Failed to parse page, URL: {}.", processUrl(url), exception);
             }
+            recommendService.saveParsedData(recommend);
         }
 
     }

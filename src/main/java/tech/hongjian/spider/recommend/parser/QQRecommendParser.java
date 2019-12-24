@@ -58,10 +58,10 @@ public class QQRecommendParser extends BaseRecommendParser {
             LOGGER.info("[Recommend-{}] name: {}, URL: {}", getPlatform(), name, url);
             recommend.setIndex(Integer.valueOf(items[2]));
             try {
-                Video video = getVideoInfo(url, name);
+                Video video = getVideoInfo(processUrl(url), name);
                 recommend.setVideo(video);
             } catch (Exception exception) {
-                LOGGER.warn("Failed to parse page.", exception);
+                LOGGER.warn("Failed to parse page, URL: {}.", processUrl(url), exception);
             }
             recommendService.saveParsedData(recommend);
         }
