@@ -54,14 +54,14 @@ public class QQRecommendParser extends BaseRecommendParser {
             recommend.setPlatform(getPlatform());
             String[] items = e.attr("_stat").split(":");
             String name = items[3];
-            String url = e.attr("href");
+            String url = processUrl(e.attr("href"));
             LOGGER.info("[Recommend-{}] name: {}, URL: {}", getPlatform(), name, url);
             recommend.setIndex(Integer.valueOf(items[2]));
             try {
-                Video video = getVideoInfo(processUrl(url), name);
+                Video video = getVideoInfo(url, name);
                 recommend.setVideo(video);
             } catch (Exception exception) {
-                LOGGER.warn("Failed to parse page, URL: {}.", processUrl(url), exception);
+                LOGGER.warn("Failed to parse page, URL: {}.", url, exception);
             }
             recommendService.saveParsedData(recommend);
         }
@@ -75,7 +75,7 @@ public class QQRecommendParser extends BaseRecommendParser {
 
 
     private String getFrameSource(Document doc) {
-        return doc.select(".B_Video frame").attr("src");
+        return processUrl(doc.select(".B_Video frame").attr("src"));
     }
 
     private Video getVideoInfo(String url, String name) throws IOException {

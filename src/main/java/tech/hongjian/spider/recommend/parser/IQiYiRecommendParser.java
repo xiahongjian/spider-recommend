@@ -47,17 +47,17 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
         for (Element e : navs) {
             index++;
 
-            String url = e.attr("href");
+            String url = processUrl(e.attr("href"));
             String name = e.select("span.side-title").text();
             LOGGER.info("[Recommend-{}] name: {}, URL: {}", getPlatform(), name, url);
             Recommend recommend = new Recommend();
             recommend.setIndex(index);
             recommend.setPlatform(getPlatform());
             try {
-                Video v = getVideoInfo(processUrl(url), name);
+                Video v = getVideoInfo(url, name);
                 recommend.setVideo(v);
             } catch (Exception exception) {
-                LOGGER.warn("Failed to parse page, URL: {}", processUrl(url), exception);
+                LOGGER.warn("Failed to parse page, URL: {}", url, exception);
             }
             recommendService.saveParsedData(recommend);
         }
@@ -71,7 +71,7 @@ public class IQiYiRecommendParser extends BaseRecommendParser {
             return v;
         }
         Document doc = getDocument(url);
-        String detailUrl = doc.select(".player-title a.title-link").attr("href");
+        String detailUrl = processUrl(doc.select(".player-title a.title-link").attr("href"));
         // 没有详情页面链接则在当前页面查找Video相关信息
         if (StringUtils.isBlank(detailUrl)) {
             return getCurrentPageDetail(doc, v);

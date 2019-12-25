@@ -55,13 +55,13 @@ public class YoukuRecommendParser extends BaseRecommendParser {
             recommend.setPlatform(getPlatform());
 
             String name = e.select("h2").text().substring(String.valueOf(index).length());
-            String url = e.attr("href");
+            String url = processUrl(e.attr("href"));
             LOGGER.info("[Recommend-{}] name: {}, URL: {}", getPlatform(), name, url);
             try {
-                Video v = getVideoInfo(processUrl(url), name);
+                Video v = getVideoInfo(url, name);
                 recommend.setVideo(v);
             } catch (Exception exception) {
-                LOGGER.warn("Failed to parse page, URL: {}.", processUrl(url), exception);
+                LOGGER.warn("Failed to parse page, URL: {}.", url, exception);
             }
             recommendService.saveParsedData(recommend);
         }
@@ -76,11 +76,11 @@ public class YoukuRecommendParser extends BaseRecommendParser {
         }
 
         Document doc = getDocument(url);
-        String detailUrl = doc.select(".title-wrap h1 span a").attr("href");
+        String detailUrl = processUrl(doc.select(".title-wrap h1 span a").attr("href"));
         if (StringUtils.isBlank(detailUrl)) {
-            detailUrl = doc.select(".tvinfo h2 a").attr("href");
+            detailUrl = processUrl(doc.select(".tvinfo h2 a").attr("href"));
         }
-        return featchDetail(processUrl(detailUrl), v);
+        return featchDetail(detailUrl, v);
     }
 
     private Video featchDetail(String detailUrl, Video v) throws IOException {
