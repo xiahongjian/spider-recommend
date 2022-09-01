@@ -21,7 +21,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <jsoup.version>1.12.1</jsoup.version>
+        <jsoup.version>1.15.3</jsoup.version>
         <commons-lang3.version>3.5</commons-lang3.version>
     </properties>
 
